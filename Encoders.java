@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Encoder Auto", group="Robot")
-@Disabled
+
 public class Encoders extends LinearOpMode {
 
     /* Declare OpMode members. */
