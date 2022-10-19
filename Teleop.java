@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Teleop")
@@ -11,6 +12,8 @@ public class Teleop extends OpMode {
     DcMotor backLeft;
     DcMotor frontRight;
     DcMotor backRight;
+    DcMotor Cascade;
+    CRServo inTake;
 
     @Override
     public void init() {
@@ -18,6 +21,8 @@ public class Teleop extends OpMode {
         backLeft = hardwareMap.dcMotor.get("backLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backRight = hardwareMap.dcMotor.get("backRight");
+        Cascade = hardwareMap.dcMotor.get("Cascade");
+        inTake = hardwareMap.crservo.get("inTake");
     }
 
     @Override
@@ -35,6 +40,48 @@ public class Teleop extends OpMode {
         } else {
             frontRight.setPower(0);
             backRight.setPower(0);
+        }
+        if (Math.abs(-gamepad2.right_trigger) > .1) {
+            inTake.setPower(-gamepad2.right_trigger * .5);
+        }
+        else {
+            inTake.setPower(0);
+        }
+        if (Math.abs(-gamepad2.left_trigger) > .1) {
+            inTake.setPower(-gamepad2.left_trigger * -.5);
+        }
+        else {
+            inTake.setPower(0);
+        }
+        if (Math.abs(-gamepad1.right_trigger) > .1) {
+            frontLeft.setPower(-.6);
+            backLeft.setPower(.6);
+            frontRight.setPower(-.6);
+            backRight.setPower(.6);
+        }
+        else {
+            frontLeft.setPower(0);
+            backLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+        }
+        if (Math.abs(-gamepad1.left_trigger) > .1) {
+            frontLeft.setPower(.6);
+            backLeft.setPower(-.6);
+            frontRight.setPower(.6);
+            backRight.setPower(-.6);
+        }
+        else {
+            frontLeft.setPower(0);
+            backLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+        }
+        if (Math.abs(-gamepad2.left_stick_y) > .1) {
+            Cascade.setPower(.5);
+        }
+        else {
+            Cascade.setPower(0);
         }
     }
 }
