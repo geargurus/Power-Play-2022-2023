@@ -78,7 +78,7 @@ public class Teleop extends OpMode {
             backRight.setPower(0);
         }
         if (Math.abs(-gamepad2.left_stick_y) > .1) {
-            Cascade.setPower(.5);
+            Cascade.setPower(-gamepad2.left_stick_y * .5);
         }
         else {
             Cascade.setPower(0);
