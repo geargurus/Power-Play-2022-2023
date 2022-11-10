@@ -88,13 +88,18 @@ public class LowJunctionRed extends LinearOpMode {
 
 
         encoderDrive(DRIVE_SPEED,  -10,  -10, 5.0);
-        encoderDrive(DRIVE_SPEED,  -14,  14, 5.0);
+        encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
         encoderDrive(DRIVE_SPEED, -5, -5, 5.0);
         encoderCascade(.2  ,4 , 5.0);
-        encoderDrive(DRIVE_SPEED,  -6,  -6, 5.0);
+        encoderDrive(DRIVE_SPEED,  -7,  -7, 5.0);
         intake.setPower(-1);
         sleep(1000);
-
+        encoderCascade(.2 , 2 , 5.0);
+        encoderDrive(DRIVE_SPEED, 15, 15, 5.0);
+        encoderDrive(DRIVE_SPEED, -15, 15, 5.0);
+        encoderDrive(DRIVE_SPEED, 35, 35, 5.0);
+        encoderDrive(DRIVE_SPEED, 30, -30, 5.0);
+        encoderDrive(DRIVE_SPEED, 10, 10, 5.0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
