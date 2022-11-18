@@ -86,19 +86,23 @@ public class MiddleJunctionBlue extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-
-        encoderDrive(DRIVE_SPEED,  -3,  -3, 5.0);
-        encoderDrive(DRIVE_SPEED,  26,  -26, 5.0);
-        encoderDrive(DRIVE_SPEED,  -32,  -32, 5.0);
-        encoderDrive(DRIVE_SPEED,  -25,  25, 5.0);
-        encoderDrive(DRIVE_SPEED,  -35,  -35, 5.0);
-        encoderDrive(DRIVE_SPEED,  -19,  21, 5.0);
-        encoderCascade(.1  ,2 , 5.0);
-        encoderDrive(DRIVE_SPEED,  -14,  -10, 5.0);
+        //Driving
+        encoderDrive(DRIVE_SPEED,  30,  -30, 5.0);
+        encoderDrive(DRIVE_SPEED,  -30,  -30, 5.0);
+        encoderDrive(DRIVE_SPEED,  -30,  30, 5.0);
+        encoderDrive(DRIVE_SPEED,  -24,  -24, 5.0);
+        encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
+        encoderDrive(DRIVE_SPEED,  -5,  -5, 5.0);
+        encoderCascade(.2  ,7 , 5.0);
         intake.setPower(-1);
         sleep(1000);
-
-
+        //Parking
+        encoderCascade(.2 , 2, 5.0);
+        encoderDrive(DRIVE_SPEED, -5, -5, 5.0);
+        encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
+        encoderDrive(DRIVE_SPEED, 30, 30, 5.0);
+        encoderDrive(DRIVE_SPEED, 30, -30, 5.0);
+        encoderDrive(DRIVE_SPEED, 45, 45, 5.0);
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(3000);
