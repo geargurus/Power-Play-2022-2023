@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Encoders;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -27,7 +27,6 @@ public class SignalPark extends LinearOpMode {
     // For example, use a value of 2.0 for a 12-tooth spur gear driving a 24-tooth spur gear.
     // This is gearing DOWN for less speed and more torque.
     // For gearing UP, use a gear ratio less than 1.0. Note this will affect the direction of wheel rotation.
-    //Neco-Arc waz hear
     static final double     COUNTS_PER_MOTOR_REV    = 312 ;
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double     WHEEL_DIAMETER_INCHES   = 3.7 ;     // For figuring circumference
@@ -80,6 +79,28 @@ public class SignalPark extends LinearOpMode {
                 bl.getCurrentPosition(),
                 cascade.getCurrentPosition());
         telemetry.update();
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+
+        encoderDrive(DRIVE_SPEED, -20, -20, 5.0);
+        if (colorSensor.red() > 15) {
+            encoderDrive(DRIVE_SPEED,  30,  30, 5.0);
+            encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
+            encoderDrive(DRIVE_SPEED, -30, -30, 5.0);
+
+        }
+        if (colorSensor.green() > 15) {
+            encoderDrive(DRIVE_SPEED,  -30,  -30, 5.0);
+
+            sleep(1000);
+
+        }
+        if (colorSensor.blue() > 15) {
+            encoderDrive(DRIVE_SPEED,  30,  30, 5.0);
+            encoderDrive(DRIVE_SPEED,  15,  -15, 5.0);
+            encoderDrive(DRIVE_SPEED, -30, -30, 5.0);
+
+        }
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addData("red: ", colorSensor.red());
@@ -88,12 +109,6 @@ public class SignalPark extends LinearOpMode {
             telemetry.addData("alpha: ", colorSensor.alpha());
             telemetry.update();
         }
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        if (colorSensor.red() > 20) {
-            encoderDrive(DRIVE_SPEED, -10, -10, 5.0);
-        }
-
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(3000);
