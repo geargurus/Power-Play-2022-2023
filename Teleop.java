@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teamcode.Teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Teleop")
 public class Teleop extends OpMode {
@@ -27,42 +28,37 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
-        //Front back Left
         if (Math.abs(-gamepad1.left_stick_y) > .1) {
-            frontLeft.setPower(-gamepad1.left_stick_y * -1);
-            backLeft.setPower(-gamepad1.left_stick_y * -1);
+            frontLeft.setPower(-gamepad1.left_stick_y * -.6);
+            backLeft.setPower(-gamepad1.left_stick_y * .6);
         } else {
             frontLeft.setPower(0);
             backLeft.setPower(0);
         }
-        //Front back Right
         if (Math.abs(-gamepad1.right_stick_y) > .1) {
-            frontRight.setPower(-gamepad1.right_stick_y * 1);
-            backRight.setPower(-gamepad1.right_stick_y * 1);
+            frontRight.setPower(-gamepad1.right_stick_y * -.6);
+            backRight.setPower(-gamepad1.right_stick_y * .6);
         } else {
             frontRight.setPower(0);
             backRight.setPower(0);
         }
-        //Intake "Input"
-        if (Math.abs(-gamepad2.right_trigger) > .1) {
-            inTake.setPower(1);
+        if (gamepad2.right_bumper) {
+            inTake.setPower(.5);
         }
         else {
             inTake.setPower(0);
         }
-        //Intake "Output"
-        if (Math.abs(-gamepad2.left_trigger) > .1) {
-            inTake.setPower(-1);
+        if (gamepad2.left_bumper){
+            inTake.setPower(-.5);
         }
         else {
             inTake.setPower(0);
         }
-        //Side speed Right
         if (Math.abs(-gamepad1.right_trigger) > .1) {
-            frontLeft.setPower(-.9);
-            backLeft.setPower(.9);
-            frontRight.setPower(-.9);
-            backRight.setPower(.9);
+            frontLeft.setPower(.6);
+            backLeft.setPower(-.6);
+            frontRight.setPower(.6);
+            backRight.setPower(-.6);
         }
         else {
             frontLeft.setPower(0);
@@ -70,12 +66,11 @@ public class Teleop extends OpMode {
             frontRight.setPower(0);
             backRight.setPower(0);
         }
-        //Side speed Left
         if (Math.abs(-gamepad1.left_trigger) > .1) {
-            frontLeft.setPower(.9);
-            backLeft.setPower(-.9);
-            frontRight.setPower(.9);
-            backRight.setPower(-.9);
+            frontLeft.setPower(-6);
+            backLeft.setPower(.6);
+            frontRight.setPower(-.6);
+            backRight.setPower(.6);
         }
         else {
             frontLeft.setPower(0);
@@ -83,7 +78,6 @@ public class Teleop extends OpMode {
             frontRight.setPower(0);
             backRight.setPower(0);
         }
-        //Cascade
         if (Math.abs(-gamepad2.left_stick_y) > .1) {
             Cascade.setPower(-gamepad2.left_stick_y * .5);
         }
