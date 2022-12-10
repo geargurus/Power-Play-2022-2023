@@ -86,7 +86,7 @@ public class LowJunctionRed extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-
+        //Scoring
         encoderDrive(DRIVE_SPEED,  -10,  -10, 5.0);
         encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
         encoderDrive(DRIVE_SPEED, -5, -5, 5.0);
@@ -94,6 +94,7 @@ public class LowJunctionRed extends LinearOpMode {
         encoderDrive(DRIVE_SPEED,  -7,  -7, 5.0);
         intake.setPower(-1);
         sleep(1000);
+        //Parking
         encoderCascade(.2 , 2 , 5.0);
         encoderDrive(DRIVE_SPEED, 15, 15, 5.0);
         encoderDrive(DRIVE_SPEED, -15, 15, 5.0);

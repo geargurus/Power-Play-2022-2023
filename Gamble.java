@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="MiddleJunctionBlue", group="Robot")
+@Autonomous(name="Gamble", group="Robot")
 
-public class MiddleJunctionBlue extends LinearOpMode {
+public class Gamble extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor         fr   = null;
@@ -80,29 +80,16 @@ public class MiddleJunctionBlue extends LinearOpMode {
                 fl.getCurrentPosition(),
                 br.getCurrentPosition(),
                 bl.getCurrentPosition(),
-        cascade.getCurrentPosition());
+                cascade.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        //Driving
-        encoderDrive(DRIVE_SPEED,  30,  -30, 5.0);
-        encoderDrive(DRIVE_SPEED,  -30,  -30, 5.0);
-        encoderDrive(DRIVE_SPEED,  -30,  30, 5.0);
-        encoderDrive(DRIVE_SPEED,  -24,  -24, 5.0);
-        encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
-        encoderDrive(DRIVE_SPEED,  -5,  -5, 5.0);
-        encoderCascade(.2  ,7 , 5.0);
-        intake.setPower(-1);
-        sleep(1000);
-        //Parking
-        encoderCascade(.2 , 2, 5.0);
-        encoderDrive(DRIVE_SPEED, -5, -5, 5.0);
-        encoderDrive(DRIVE_SPEED, 15, -15, 5.0);
-        encoderDrive(DRIVE_SPEED, 30, 30, 5.0);
-        encoderDrive(DRIVE_SPEED, 30, -30, 5.0);
-        encoderDrive(DRIVE_SPEED, 45, 45, 5.0);
+
+        encoderDrive(DRIVE_SPEED,  -60,  -60, 5.0);
+
+
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(3000);
@@ -117,56 +104,56 @@ public class MiddleJunctionBlue extends LinearOpMode {
      *  3) Driver stops the opmode running.
      */
     public void encoderCascade(double speed,
-                             double Inches,
-                             double timeoutS) {
+                               double Inches,
+                               double timeoutS) {
         int newCascadeTarget;
 
 
-            // Ensure that the opmode is still active
-            if (opModeIsActive()) {
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
 
-                // Determine new target position, and pass to motor controller
+            // Determine new target position, and pass to motor controller
 
-                newCascadeTarget = cascade.getCurrentPosition() + (int)(Inches * ROTATION_PER_INCH);
-                cascade.setTargetPosition(newCascadeTarget);
+            newCascadeTarget = cascade.getCurrentPosition() + (int)(Inches * ROTATION_PER_INCH);
+            cascade.setTargetPosition(newCascadeTarget);
 
-                // Turn On RUN_TO_POSITION
+            // Turn On RUN_TO_POSITION
 
-                cascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            cascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                // reset the timeout time and start motion.
-                runtime.reset();
+            // reset the timeout time and start motion.
+            runtime.reset();
 
-                cascade.setPower(Math.abs(speed));
+            cascade.setPower(Math.abs(speed));
 
-                // keep looping while we are still active, and there is time left, and both motors are running.
-                // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-                // its target position, the motion will stop.  This is "safer" in the event that the robot will
-                // always end the motion as soon as possible.
-                // However, if you require that BOTH motors have finished their moves before the robot continues
-                // onto the next step, use (isBusy() || isBusy()) in the loop test.
-                while (opModeIsActive() &&
-                        (runtime.seconds() < timeoutS) &&
-                        (cascade.isBusy())) {
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (cascade.isBusy())) {
 
-                    // Display it for the driver.
-                    telemetry.addData("Running to",  " %7d",  newCascadeTarget);
-                    telemetry.addData("Currently at",  " at %7d", newCascadeTarget,
-                            cascade.getCurrentPosition());
-                    telemetry.update();
-                }
-
-                // Stop all motion;
-
-                cascade.setPower(0);
-
-                // Turn off RUN_TO_POSITION
-
-                cascade.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                sleep(250);
+                // Display it for the driver.
+                telemetry.addData("Running to",  " %7d",  newCascadeTarget);
+                telemetry.addData("Currently at",  " at %7d", newCascadeTarget,
+                        cascade.getCurrentPosition());
+                telemetry.update();
             }
+
+            // Stop all motion;
+
+            cascade.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+
+            cascade.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);
         }
+    }
 
 
     public void encoderDrive(double speed,
@@ -216,7 +203,7 @@ public class MiddleJunctionBlue extends LinearOpMode {
                 // Display it for the driver.
                 telemetry.addData("Running to",  " %7d :%7d :%7d :%7d", newfrTarget,  newflTarget, newbrTarget, newblTarget);
                 telemetry.addData("Currently at",  " at %7d :%7d :%7d :%7d", newfrTarget, newflTarget, newbrTarget, newblTarget,
-                fr.getCurrentPosition(), fl.getCurrentPosition(), br.getCurrentPosition(), bl.getCurrentPosition());
+                        fr.getCurrentPosition(), fl.getCurrentPosition(), br.getCurrentPosition(), bl.getCurrentPosition());
                 telemetry.update();
             }
 
