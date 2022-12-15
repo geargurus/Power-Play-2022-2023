@@ -12,7 +12,8 @@ public class Teleop extends OpMode {
     DcMotor backLeft;
     DcMotor frontRight;
     DcMotor backRight;
-    DcMotor Cascade;
+    DcMotor ViperLeft;
+    DcMotor ViperRight;
     CRServo inTake;
 
     @Override
@@ -21,7 +22,8 @@ public class Teleop extends OpMode {
         backLeft = hardwareMap.dcMotor.get("backLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backRight = hardwareMap.dcMotor.get("backRight");
-        Cascade = hardwareMap.dcMotor.get("Cascade");
+        ViperLeft = hardwareMap.dcMotor.get("ViperLeft");
+        ViperRight = hardwareMap.dcMotor.get("ViperRight");
         inTake = hardwareMap.crservo.get("inTake");
     }
 
@@ -85,10 +87,12 @@ public class Teleop extends OpMode {
         }
         //Cascade
         if (Math.abs(-gamepad2.left_stick_y) > .1) {
-            Cascade.setPower(-gamepad2.left_stick_y * .5);
+            ViperLeft.setPower(-gamepad2.left_stick_y * .5);
+            ViperRight.setPower(-gamepad2.left_stick_y * .5);
         }
         else {
-            Cascade.setPower(0);
+            ViperLeft.setPower(0);
+            ViperRight.setPower(0);
         }
     }
 }
