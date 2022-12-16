@@ -61,19 +61,6 @@ public class Teleop extends OpMode {
         }
         //Side speed Right
         if (gamepad1.right_bumper) {
-            frontLeft.setPower(-.9);
-            backLeft.setPower(.9);
-            frontRight.setPower(-.9);
-            backRight.setPower(.9);
-        }
-        else {
-            frontLeft.setPower(0);
-            backLeft.setPower(0);
-            frontRight.setPower(0);
-            backRight.setPower(0);
-        }
-        //Side speed Left
-        if (gamepad1.left_bumper) {
             frontLeft.setPower(.9);
             backLeft.setPower(-.9);
             frontRight.setPower(.9);
@@ -85,10 +72,23 @@ public class Teleop extends OpMode {
             frontRight.setPower(0);
             backRight.setPower(0);
         }
+        //Side speed Left
+        if (gamepad1.left_bumper) {
+            frontLeft.setPower(-.9);
+            backLeft.setPower(.9);
+            frontRight.setPower(-.9);
+            backRight.setPower(.9);
+        }
+        else {
+            frontLeft.setPower(0);
+            backLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+        }
         //Cascade
         if (Math.abs(-gamepad2.left_stick_y) > .1) {
             ViperLeft.setPower(-gamepad2.left_stick_y * .5);
-            ViperRight.setPower(-gamepad2.left_stick_y * .5);
+            ViperRight.setPower(-gamepad2.left_stick_y * -.5);
         }
         else {
             ViperLeft.setPower(0);

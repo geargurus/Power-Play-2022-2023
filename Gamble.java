@@ -18,7 +18,8 @@ public class Gamble extends LinearOpMode {
     private DcMotor         fl  = null;
     private DcMotor         bl  = null;
     private DcMotor         br  = null;
-    private DcMotor cascade = null;
+    private DcMotor VL = null;
+    private DcMotor VR = null;
     private CRServo intake = null;
 
     private ElapsedTime     runtime = new ElapsedTime();
@@ -51,7 +52,8 @@ public class Gamble extends LinearOpMode {
         fl = hardwareMap.get(DcMotor.class, "frontLeft");
         br  = hardwareMap.get(DcMotor.class, "backRight");
         bl  = hardwareMap.get(DcMotor.class, "backLeft");
-        cascade = hardwareMap.get(DcMotor.class,  "Cascade");
+        VL = hardwareMap.get(DcMotor.class,  "ViperLeft");
+        VR = hardwareMap.get(DcMotor.class,  "ViperRight");
         intake = hardwareMap.get(CRServo.class,  "inTake" );
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -66,13 +68,15 @@ public class Gamble extends LinearOpMode {
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        cascade.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        VL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        VR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        cascade.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        VL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        VR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Starting at",  "%7d :%7d :%7d :%7d :%7d",
@@ -80,14 +84,16 @@ public class Gamble extends LinearOpMode {
                 fl.getCurrentPosition(),
                 br.getCurrentPosition(),
                 bl.getCurrentPosition(),
-                cascade.getCurrentPosition());
+                VL.getCurrentPosition(),
+                VR.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
 
-        encoderDrive(DRIVE_SPEED,  -60,  -60, 5.0);
+        encoderStrafeL(DRIVE_SPEED,-5,-5,5.0);
+        encoderStrafeR(DRIVE_SPEED,-5,-5,5.0);
 
 
         telemetry.addData("Path", "Complete");
@@ -114,17 +120,22 @@ public class Gamble extends LinearOpMode {
 
             // Determine new target position, and pass to motor controller
 
-            newCascadeTarget = cascade.getCurrentPosition() + (int)(Inches * ROTATION_PER_INCH);
-            cascade.setTargetPosition(newCascadeTarget);
+            newCascadeTarget = VL.getCurrentPosition() + (int)(Inches * ROTATION_PER_INCH);
+           VL.setTargetPosition(newCascadeTarget);
+
+            newCascadeTarget = VR.getCurrentPosition() + (int)(Inches * ROTATION_PER_INCH);
+            VR.setTargetPosition(newCascadeTarget);
 
             // Turn On RUN_TO_POSITION
 
-            cascade.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            VL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            VR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
 
-            cascade.setPower(Math.abs(speed));
+            VL.setPower(Math.abs(speed));
+            VR.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -134,22 +145,24 @@ public class Gamble extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (cascade.isBusy())) {
+                    (VL.isBusy() && VR.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Running to",  " %7d",  newCascadeTarget);
                 telemetry.addData("Currently at",  " at %7d", newCascadeTarget,
-                        cascade.getCurrentPosition());
+                        VL.getCurrentPosition(), VR.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
 
-            cascade.setPower(0);
+            VL.setPower(0);
+            VR.setPower(0);
 
             // Turn off RUN_TO_POSITION
 
-            cascade.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            VL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            VR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(250);
         }
@@ -189,6 +202,140 @@ public class Gamble extends LinearOpMode {
             fl.setPower(Math.abs(speed));
             br.setPower(Math.abs(speed));
             bl.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (fr.isBusy() && br.isBusy() && bl.isBusy() && fl.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Running to",  " %7d :%7d :%7d :%7d", newfrTarget,  newflTarget, newbrTarget, newblTarget);
+                telemetry.addData("Currently at",  " at %7d :%7d :%7d :%7d", newfrTarget, newflTarget, newbrTarget, newblTarget,
+                        fr.getCurrentPosition(), fl.getCurrentPosition(), br.getCurrentPosition(), bl.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            fr.setPower(0);
+            fl.setPower(0);
+            br.setPower(0);
+            bl.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);
+        }
+    }
+
+    public void encoderStrafeL(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS) {
+        int newflTarget;
+        int newfrTarget;
+        int newblTarget;
+        int newbrTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newflTarget = fl.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newfrTarget = fr.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newblTarget = bl.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newbrTarget = br.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            fl.setTargetPosition(newflTarget);
+            fr.setTargetPosition(newfrTarget);
+            bl.setTargetPosition(newblTarget);
+            br.setTargetPosition(newbrTarget);
+
+            // Turn On RUN_TO_POSITION
+            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            fr.setPower(Math.abs(-speed));
+            fl.setPower(Math.abs(speed));
+            br.setPower(Math.abs(-speed));
+            bl.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (fr.isBusy() && br.isBusy() && bl.isBusy() && fl.isBusy())) {
+
+                // Display it for the driver.
+                telemetry.addData("Running to",  " %7d :%7d :%7d :%7d", newfrTarget,  newflTarget, newbrTarget, newblTarget);
+                telemetry.addData("Currently at",  " at %7d :%7d :%7d :%7d", newfrTarget, newflTarget, newbrTarget, newblTarget,
+                        fr.getCurrentPosition(), fl.getCurrentPosition(), br.getCurrentPosition(), bl.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            fr.setPower(0);
+            fl.setPower(0);
+            br.setPower(0);
+            bl.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(250);
+        }
+    }
+
+    public void encoderStrafeR(double speed,
+                               double leftInches, double rightInches,
+                               double timeoutS) {
+        int newflTarget;
+        int newfrTarget;
+        int newblTarget;
+        int newbrTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newflTarget = fl.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newfrTarget = fr.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newblTarget = bl.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newbrTarget = br.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            fl.setTargetPosition(newflTarget);
+            fr.setTargetPosition(newfrTarget);
+            bl.setTargetPosition(newblTarget);
+            br.setTargetPosition(newbrTarget);
+
+            // Turn On RUN_TO_POSITION
+            fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            runtime.reset();
+            fr.setPower(Math.abs(speed));
+            fl.setPower(Math.abs(-speed));
+            br.setPower(Math.abs(speed));
+            bl.setPower(Math.abs(-speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits

@@ -109,25 +109,28 @@ public class Color extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            sleep(2000);
+            sleep(1000);
             telemetry.addData("Analysis", pipeline.getPosition());
             telemetry.update();
 
             switch (pipeline.getPosition()) {
                 case LEFT:
+                    encoderDrive(DRIVE_SPEED,1,1,5.0);
                     encoderDrive(DRIVE_SPEED, -25, 25, 5.0);
                     encoderDrive(DRIVE_SPEED, -10, -10, 5.0);
                     encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
                     encoderDrive(DRIVE_SPEED, -10, -10, 5.0);
                     break;
                 case RIGHT:
+                    encoderDrive(DRIVE_SPEED,1,1,5.0);
                     encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
                     encoderDrive(DRIVE_SPEED, -10,-10,5.0);
                     encoderDrive(DRIVE_SPEED,-25,25,5.0);
                     encoderDrive(DRIVE_SPEED,-10,-10,5.0);
                     break;
                 case CENTER:
-                    encoderDrive(DRIVE_SPEED,-10,-10,5.0);
+                    encoderDrive(DRIVE_SPEED,25,25,5.0);
+                    sleep(30000);
                     break;
             }
         }
