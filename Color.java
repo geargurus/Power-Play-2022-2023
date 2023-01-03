@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.*;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.CENTER;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.LEFT;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.RIGHT;
 import static org.openftc.easyopencv.OpenCvCameraRotation.SIDEWAYS_LEFT;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -108,32 +112,26 @@ public class Color extends LinearOpMode {
 
         waitForStart();
 
-        while (opModeIsActive()) {
-            sleep(1000);
-            telemetry.addData("Analysis", pipeline.getPosition());
-            telemetry.update();
+        ParkingPosition P = sleeveDetection.getPosition();
 
-            switch (pipeline.getPosition()) {
-                case LEFT:
-                    encoderDrive(DRIVE_SPEED,1,1,5.0);
-                    encoderDrive(DRIVE_SPEED, -25, 25, 5.0);
-                    encoderDrive(DRIVE_SPEED, -10, -10, 5.0);
-                    encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
-                    encoderDrive(DRIVE_SPEED, -10, -10, 5.0);
-                    break;
-                case RIGHT:
-                    encoderDrive(DRIVE_SPEED,1,1,5.0);
-                    encoderDrive(DRIVE_SPEED, 25, -25, 5.0);
-                    encoderDrive(DRIVE_SPEED, -10,-10,5.0);
-                    encoderDrive(DRIVE_SPEED,-25,25,5.0);
-                    encoderDrive(DRIVE_SPEED,-10,-10,5.0);
-                    break;
-                case CENTER:
-                    encoderDrive(DRIVE_SPEED,25,25,5.0);
-                    sleep(30000);
-                    break;
-            }
+        if (P == LEFT) {
+            encoderDrive(DRIVE_SPEED,10,10,5.0);
+            encoderDrive(DRIVE_SPEED,25,-25,5.0);
+            encoderDrive(DRIVE_SPEED,15,15,5.0);
+            encoderDrive(DRIVE_SPEED,25,-25,5.0);
+            encoderDrive(DRIVE_SPEED,10,10,5.0);
         }
+        else if (P == CENTER) {
+            encoderDrive(DRIVE_SPEED,37,37,5.0);
+        }
+        else if (P == RIGHT) {
+            encoderDrive(DRIVE_SPEED,10,10,5.0);
+            encoderDrive(DRIVE_SPEED,-25,25,5.0);
+            encoderDrive(DRIVE_SPEED,15,15,5.0);
+            encoderDrive(DRIVE_SPEED,-25,25,5.0);
+            encoderDrive(DRIVE_SPEED,10,10,5.0);
+        }
+
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(3000);
