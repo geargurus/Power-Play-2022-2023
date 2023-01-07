@@ -115,21 +115,21 @@ public class Color extends LinearOpMode {
         ParkingPosition P = sleeveDetection.getPosition();
 
         if (P == LEFT) {
-            encoderDrive(DRIVE_SPEED,10,10,5.0);
-            encoderDrive(DRIVE_SPEED,25,-25,5.0);
-            encoderDrive(DRIVE_SPEED,15,15,5.0);
-            encoderDrive(DRIVE_SPEED,25,-25,5.0);
-            encoderDrive(DRIVE_SPEED,10,10,5.0);
+            encoderDrive(DRIVE_SPEED,5,5,5.0);
+            encoderDrive(DRIVE_SPEED,29,-29,5.0);
+            encoderDrive(DRIVE_SPEED,32,32,5.0);
+            encoderDrive(DRIVE_SPEED,-28,28,5.0);
+            encoderDrive(DRIVE_SPEED,33,33,5.0);
         }
         else if (P == CENTER) {
             encoderDrive(DRIVE_SPEED,37,37,5.0);
         }
         else if (P == RIGHT) {
-            encoderDrive(DRIVE_SPEED,10,10,5.0);
-            encoderDrive(DRIVE_SPEED,-25,25,5.0);
-            encoderDrive(DRIVE_SPEED,15,15,5.0);
-            encoderDrive(DRIVE_SPEED,-25,25,5.0);
-            encoderDrive(DRIVE_SPEED,10,10,5.0);
+            encoderDrive(DRIVE_SPEED,5,5,5.0);
+            encoderDrive(DRIVE_SPEED,-29,29,5.0);
+            encoderDrive(DRIVE_SPEED,32,32,5.0);
+            encoderDrive(DRIVE_SPEED,28,-28,5.0);
+            encoderDrive(DRIVE_SPEED,33,33,5.0);
         }
 
         telemetry.addData("Path", "Complete");
