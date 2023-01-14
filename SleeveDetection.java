@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.Pipelines;
-
-import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.*;
+package org.firstinspires.ftc.teamcode;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -11,12 +9,13 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class SleeveDetection extends OpenCvPipeline {
+
     /*
     YELLOW  = Parking Left
     CYAN    = Parking Middle
     MAGENTA = Parking Right
      */
-    //Dum code
+
     public enum ParkingPosition {
         LEFT,
         CENTER,
@@ -35,7 +34,6 @@ public class SleeveDetection extends OpenCvPipeline {
             YELLOW  = new Scalar(255, 255, 0),
             CYAN    = new Scalar(0, 255, 255),
             MAGENTA = new Scalar(255, 0, 255);
-            
 
     // Anchor point definitions
     Point sleeve_pointA = new Point(
@@ -46,11 +44,11 @@ public class SleeveDetection extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
     // Running variable storing the parking position
-    private volatile ParkingPosition position = LEFT;
+    private volatile ParkingPosition position = ParkingPosition.LEFT;
+
 
     @Override
     public Mat processFrame(Mat input) {
-        // Get the submat frame, and then sum all the values
         Mat areaMat = input.submat(new Rect(sleeve_pointA, sleeve_pointB));
         Scalar sumColors = Core.sumElems(areaMat);
 
@@ -59,7 +57,7 @@ public class SleeveDetection extends OpenCvPipeline {
 
         // Change the bounding box color based on the sleeve color
         if (sumColors.val[0] == minColor) {
-            position = RIGHT;
+            position = ParkingPosition.RIGHT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -68,7 +66,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         } else if (sumColors.val[1] == minColor) {
-            position = LEFT;
+            position = ParkingPosition.LEFT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -77,7 +75,7 @@ public class SleeveDetection extends OpenCvPipeline {
                     2
             );
         } else {
-            position = CENTER;
+            position = ParkingPosition.CENTER;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -96,4 +94,4 @@ public class SleeveDetection extends OpenCvPipeline {
     public ParkingPosition getPosition() {
         return position;
     }
-}
+    }
