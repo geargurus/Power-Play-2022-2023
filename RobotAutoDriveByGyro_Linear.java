@@ -36,11 +36,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.*;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.CENTER;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.LEFT;
+import static org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection.ParkingPosition.RIGHT;
+import static org.openftc.easyopencv.OpenCvCameraRotation.SIDEWAYS_LEFT;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.SleeveDetection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Pipelines.SleeveDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 
 @Autonomous(name="Robot: Auto Drive By Gyro", group="Robot")
@@ -67,7 +77,8 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
     private double  rightSpeed    = 0;
     private int     leftTarget    = 0;
     private int     rightTarget   = 0;
-
+    private SleeveDetection sleeveDetection;
+    private OpenCvCamera camera;
 
     static final double     COUNTS_PER_MOTOR_REV    = 312 ;
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
@@ -88,6 +99,7 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
     static final double     P_TURN_GAIN            = 0.02;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_GAIN           = 0.03;     // Larger is more responsive, but also less stable
 
+    private String webcamName = "Webcam 1";
 
     @Override
     public void runOpMode() {
@@ -98,6 +110,10 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         br  = hardwareMap.get(DcMotor.class, "backRight");
         bl  = hardwareMap.get(DcMotor.class, "backLeft");
         imu = hardwareMap.get(BNO055IMU.class, "imu");
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
+        sleeveDetection = new SleeveDetection();
+        camera.setPipeline(sleeveDetection);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -139,12 +155,52 @@ public class RobotAutoDriveByGyro_Linear extends LinearOpMode {
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         resetHeading();
 
-        turnToHeading( TURN_SPEED, -90.0);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(320,240, SIDEWAYS_LEFT);
+            }
+
+            @Override
+            public void onError(int errorCode) {}
+        });
+
+        while (!isStarted()) {
+            telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
+            telemetry.update();
+        }
+        waitForStart();
+
+        ParkingPosition P = sleeveDetection.getPosition();
+
+        if (P == LEFT) {
+            encoderDrive(DRIVE_SPEED,5,5,5.0);
+            encoderDrive(DRIVE_SPEED,29,-29,5.0);
+            encoderDrive(DRIVE_SPEED,32,32,5.0);
+            encoderDrive(DRIVE_SPEED,-28,28,5.0);
+            encoderDrive(DRIVE_SPEED,33,33,5.0);
+            turnToHeading( TURN_SPEED, -90.0);
+        }
+        else if (P == CENTER) {
+            encoderDrive(DRIVE_SPEED,37,37,5.0);
+        }
+        else if (P == RIGHT) {
+            encoderDrive(DRIVE_SPEED,5,5,5.0);
+            encoderDrive(DRIVE_SPEED,-29,29,5.0);
+            encoderDrive(DRIVE_SPEED,32,32,5.0);
+            encoderDrive(DRIVE_SPEED,28,-28,5.0);
+            encoderDrive(DRIVE_SPEED,33,33,5.0);
+        }
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
-        sleep(1000);  // Pause to display last telemetry message.
+        sleep(3000);
     }
+
+
+
 
 
     public void driveStraight(double maxDriveSpeed,
