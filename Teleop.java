@@ -25,6 +25,11 @@ public class Teleop extends OpMode {
         ViperLeft = hardwareMap.dcMotor.get("ViperLeft");
         ViperRight = hardwareMap.dcMotor.get("ViperRight");
         inTake = hardwareMap.crservo.get("inTake");
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
     @Override
@@ -61,10 +66,10 @@ public class Teleop extends OpMode {
         }
         //Side speed Right
         if (gamepad1.right_bumper) {
-            frontLeft.setPower(.9);
-            backLeft.setPower(-.9);
-            frontRight.setPower(.9);
-            backRight.setPower(-.9);
+            frontLeft.setPower(-.9);
+            backLeft.setPower(.9);
+            frontRight.setPower(-.9);
+            backRight.setPower(.9);
         }
         else {
             frontLeft.setPower(0);
@@ -74,10 +79,10 @@ public class Teleop extends OpMode {
         }
         //Side speed Left
         if (gamepad1.left_bumper) {
-            frontLeft.setPower(-.9);
-            backLeft.setPower(.9);
-            frontRight.setPower(-.9);
-            backRight.setPower(.9);
+            frontLeft.setPower(.9);
+            backLeft.setPower(-.9);
+            frontRight.setPower(.9);
+            backRight.setPower(-.9);
         }
         else {
             frontLeft.setPower(0);
