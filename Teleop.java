@@ -25,17 +25,19 @@ public class Teleop extends OpMode {
         ViperLeft = hardwareMap.dcMotor.get("ViperLeft");
         ViperRight = hardwareMap.dcMotor.get("ViperRight");
         inTake = hardwareMap.crservo.get("inTake");
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        ViperRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ViperLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
     @Override
     public void loop() {
         //Front back Left
-        if (Math.abs(-gamepad1.left_stick_y) > .1) {
+        if (Math.abs(-gamepad1.left_stick_y) > .2) {
             frontLeft.setPower(-gamepad1.left_stick_y * -1);
             backLeft.setPower(-gamepad1.left_stick_y * -1);
         } else {
@@ -43,7 +45,7 @@ public class Teleop extends OpMode {
             backLeft.setPower(0);
         }
         //Front back Right
-        if (Math.abs(-gamepad1.right_stick_y) > .1) {
+        if (Math.abs(-gamepad1.right_stick_y) > .2) {
             frontRight.setPower(-gamepad1.right_stick_y * 1);
             backRight.setPower(-gamepad1.right_stick_y * 1);
         } else {
