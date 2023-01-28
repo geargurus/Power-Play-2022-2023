@@ -32,6 +32,8 @@ public class EncoderWheelTest extends LinearOpMode {
         //telemetry.addData("Counts:", COUNTS_PER_MOTOR_REV);
         encoderFLeft(DRIVE_SPEED, 20.0, 300.0);
         encoderFRight(DRIVE_SPEED, 20.0, 300);
+        encoderbLeft(DRIVE_SPEED, 20.0, 300);
+        encoderbRight(DRIVE_SPEED, 20.0, 300);
 
     }
 
@@ -120,3 +122,4 @@ public class EncoderWheelTest extends LinearOpMode {
         }
     }
     }
+
