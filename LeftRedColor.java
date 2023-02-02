@@ -57,7 +57,7 @@ public class LeftRedColor extends LinearOpMode {
     static final double DRIVE_GEAR_REDUCTION = 1.0;
     static final double WHEEL_DIAMETER_INCHES = 3.7;
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
-    static final double DRIVE_SPEED = 0.4;
+    static final double DRIVE_SPEED = 0.6;
 
     static final double COUNTS_PER_SPOOL_MOTOR_REV = 537.7;
     // 0.35 inches
@@ -151,18 +151,20 @@ public class LeftRedColor extends LinearOpMode {
         if (P == LEFT) {
             encoderDrive(DRIVE_SPEED, 52, 52, 5.0);
             encoderDrive(DRIVE_SPEED, -9, -9, 5.0);
-            rotate(138, 0.5);
+            rotate(137, 0.5);
             liftDrive(1,8,5.0); //19.5 inches - 7 inch starting (right sprocket)
-            encoderDrive(DRIVE_SPEED, -10, -10, 5.0);
+            encoderDrive(DRIVE_SPEED, -8, -8, 5.0);
             intake.setPower(4);
             sleep(3000);
             encoderDrive(DRIVE_SPEED, 5, 5, 5.0);
             liftDrive(1,-5,5.0); //19.5 inches - 7 inch starting (right sprocket)
-            rotate(-76, 0.5);
-            encoderDrive(DRIVE_SPEED, -24, -24, 5.0);
+            rotate(-60, 0.5);
+            encoderDrive(.4, -23, -23, 5.0);
             intake.setPower(-4);
             liftDrive(.1,-1,5.0);
             liftDrive(.1,5,5.0);
+            encoderDrive(DRIVE_SPEED, 5, 5, 5.0);
+            rotate(30, 0.5);
 
 
         } else if (P == CENTER) {
