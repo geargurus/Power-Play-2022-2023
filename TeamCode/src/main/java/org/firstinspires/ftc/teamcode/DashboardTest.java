@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.SleeveDetection.ParkingPosition.LEF
 import static org.firstinspires.ftc.teamcode.SleeveDetection.ParkingPosition.RIGHT;
 import static org.openftc.easyopencv.OpenCvCameraRotation.SIDEWAYS_LEFT;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -22,8 +23,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name = "Color")
-public class Color extends LinearOpMode {
+@Autonomous(name = "DashboardTest")
+public class DashboardTest extends LinearOpMode {
 
     private DcMotor fr = null;
     private DcMotor fl = null;
@@ -140,26 +141,14 @@ public class Color extends LinearOpMode {
         while (!isStarted()) {
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             telemetry.update();
+            FtcDashboard.getInstance().startCameraStream(camera, 60);
+
         }
+
         waitForStart();
 
-        SleeveDetection.ParkingPosition P = sleeveDetection.getPosition();
 
-        if (P == LEFT) {
-            encoderDrive(DRIVE_SPEED, 5, 5, 5.0);
-            encoderDrive(DRIVE_SPEED, 28, -28, 2.0);
-            encoderDrive(DRIVE_SPEED, 34, 34, 5.0);
-            encoderDrive(DRIVE_SPEED, -28, 28, 5.0);
-            encoderDrive(DRIVE_SPEED, 33, 33, 5.0);
-        } else if (P == CENTER) {
-            encoderDrive(DRIVE_SPEED, 37, 37, 5.0);
-        } else if (P == RIGHT) {
-            encoderDrive(DRIVE_SPEED, 5, 5, 5.0);
-            encoderDrive(DRIVE_SPEED, -29, 29, 5.0);
-            encoderDrive(DRIVE_SPEED, 32, 32, 5.0);
-            encoderDrive(DRIVE_SPEED, 28, -28, 5.0);
-            encoderDrive(DRIVE_SPEED, 33, 33, 5.0);
-        }
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
