@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -142,6 +143,12 @@ public class DashboardTest extends LinearOpMode {
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             telemetry.update();
             FtcDashboard.getInstance().startCameraStream(camera, 60);
+            FtcDashboard dashboard = FtcDashboard.getInstance();
+            Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
+            dashboardTelemetry.addData("ROTATION: ", sleeveDetection.getPosition());
+            dashboardTelemetry.update();
+
 
         }
 
@@ -152,6 +159,11 @@ public class DashboardTest extends LinearOpMode {
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
+        dashboardTelemetry.addData("Path", "Complete");
+        dashboardTelemetry.update();
         sleep(3000);
 
     }
