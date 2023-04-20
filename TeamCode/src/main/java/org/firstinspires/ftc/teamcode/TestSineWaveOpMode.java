@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.FtcDashboard;
+/*import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,12 +17,12 @@ public class TestSineWaveOpMode extends OpMode {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         dashboard = FtcDashboard.getInstance();
     }
 
     @Override
-    protected void loop() throws InterruptedException {
+    public void loop() {
         System.out.println(Math.sin(System.currentTimeMillis()));
         Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
@@ -32,4 +32,4 @@ public class TestSineWaveOpMode extends OpMode {
         dashboardTelemetry.update();
         Thread.sleep(1);
     }
-}
+}*/

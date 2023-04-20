@@ -92,7 +92,7 @@ public class LowJunctionRed extends LinearOpMode {
         waitForStart();
 
         //Scoring
-        encoderDrive(DRIVE_SPEED,  -10,  -10, 5.0);
+        encoderDrive(DRIVE_SPEED,  -10,  -10, 5.0); //one movement
         encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
         encoderDrive(DRIVE_SPEED, -5, -5, 5.0);
         encoderCascade(.2  ,4 , 5.0);

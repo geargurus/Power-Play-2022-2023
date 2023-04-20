@@ -128,6 +128,18 @@ public class DashboardTest extends LinearOpMode {
                 VR.getCurrentPosition());
         telemetry.update();
 
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
+        dashboardTelemetry.addData("Starting at", "%7d :%7d",
+                fr.getCurrentPosition(),
+                fl.getCurrentPosition(),
+                br.getCurrentPosition(),
+                bl.getCurrentPosition(),
+                VL.getCurrentPosition(),
+                VR.getCurrentPosition());
+        dashboardTelemetry.update();
+
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -143,8 +155,6 @@ public class DashboardTest extends LinearOpMode {
             telemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             telemetry.update();
             FtcDashboard.getInstance().startCameraStream(camera, 60);
-            FtcDashboard dashboard = FtcDashboard.getInstance();
-            Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
             dashboardTelemetry.addData("ROTATION: ", sleeveDetection.getPosition());
             dashboardTelemetry.update();
@@ -155,12 +165,12 @@ public class DashboardTest extends LinearOpMode {
         waitForStart();
 
 
-
+        encoderDrive(DRIVE_SPEED,  -10000,  -1000, 5.0); //one movement
+        encoderDrive(DRIVE_SPEED,  -15,  15, 5.0);
+        encoderDrive(DRIVE_SPEED, -5, -5, 5.0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        Telemetry dashboardTelemetry = dashboard.getTelemetry();
 
         dashboardTelemetry.addData("Path", "Complete");
         dashboardTelemetry.update();
@@ -218,6 +228,13 @@ public class DashboardTest extends LinearOpMode {
                 telemetry.addData("Currently at", " at %7d :%7d :%7d :%7d", newfrTarget, newflTarget, newbrTarget, newblTarget,
                         fr.getCurrentPosition(), fl.getCurrentPosition(), br.getCurrentPosition(), bl.getCurrentPosition());
                 telemetry.update();
+                FtcDashboard dashboard = FtcDashboard.getInstance();
+                Telemetry dashboardTelemetry = dashboard.getTelemetry();
+
+                dashboardTelemetry.addData("Running to", " %7d :%7d :%7d :%7d", newfrTarget, newflTarget, newbrTarget, newblTarget);
+                dashboardTelemetry.addData("Currently at", " at %7d :%7d :%7d :%7d", newfrTarget, newflTarget, newbrTarget, newblTarget, fr.getCurrentPosition(), fl.getCurrentPosition(), br.getCurrentPosition(), bl.getCurrentPosition());
+                dashboardTelemetry.update();
+
             }
             // Stop all motion;
             fr.setPower(0);
@@ -267,6 +284,7 @@ public class DashboardTest extends LinearOpMode {
                 telemetry.addData("Currently at", " at %7d :%7d", newVLTarget, newVRTarget,
                         VR.getCurrentPosition(), VL.getCurrentPosition());
                 telemetry.update();
+
             }
             // Stop all motion;
             VL.setPower(0);
