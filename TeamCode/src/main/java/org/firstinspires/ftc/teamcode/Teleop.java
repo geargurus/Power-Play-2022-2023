@@ -12,9 +12,7 @@ public class Teleop extends OpMode {
     DcMotor backLeft;
     DcMotor frontRight;
     DcMotor backRight;
-    DcMotor ViperLeft;
-    DcMotor ViperRight;
-    CRServo inTake;
+    DcMotor outSlide;
 
     @Override
     public void init() {
@@ -22,15 +20,11 @@ public class Teleop extends OpMode {
         backLeft = hardwareMap.dcMotor.get("backLeft");
         frontRight = hardwareMap.dcMotor.get("frontRight");
         backRight = hardwareMap.dcMotor.get("backRight");
-        ViperLeft = hardwareMap.dcMotor.get("ViperLeft");
-        ViperRight = hardwareMap.dcMotor.get("ViperRight");
-        inTake = hardwareMap.crservo.get("inTake");
+
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        ViperRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        ViperLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -51,20 +45,6 @@ public class Teleop extends OpMode {
         } else {
             frontRight.setPower(0);
             backRight.setPower(0);
-        }
-        //Intake "Input"
-        if (gamepad2.right_bumper) {
-            inTake.setPower(1);
-        }
-        else {
-            inTake.setPower(0);
-        }
-        //Intake "Output"
-        if (gamepad2.left_bumper) {
-            inTake.setPower(-1);
-        }
-        else {
-            inTake.setPower(0);
         }
         //Side speed Right
         if (gamepad1.right_bumper) {
@@ -92,14 +72,13 @@ public class Teleop extends OpMode {
             frontRight.setPower(0);
             backRight.setPower(0);
         }
-        //Cascade
-        if (Math.abs(-gamepad2.left_stick_y) > .1) {
-            ViperLeft.setPower(-gamepad2.left_stick_y * .5);
-            ViperRight.setPower(-gamepad2.left_stick_y * -.5);
+
+        //GamePad 2
+        if (Math.abs(gamepad2.right_stick_x) > .2) {
+            outSlide.setPower(gamepad2.right_stick_x * 1);
         }
         else {
-            ViperLeft.setPower(0);
-            ViperRight.setPower(0);
+            outSlide.setPower(0);
         }
     }
 }
