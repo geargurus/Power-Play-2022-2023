@@ -31,9 +31,6 @@ public class DashboardTest extends LinearOpMode {
     private DcMotor fl = null;
     private DcMotor bl = null;
     private DcMotor br = null;
-    private DcMotor VL = null;
-    private DcMotor VR = null;
-    private CRServo intake = null;
     private SleeveDetection sleeveDetection;
     private OpenCvCamera camera;
     private BNO055IMU imu = null;
@@ -79,9 +76,7 @@ public class DashboardTest extends LinearOpMode {
         fl = hardwareMap.get(DcMotor.class, "frontLeft");
         br = hardwareMap.get(DcMotor.class, "backRight");
         bl = hardwareMap.get(DcMotor.class, "backLeft");
-        VL = hardwareMap.get(DcMotor.class, "ViperLeft");
-        VR = hardwareMap.get(DcMotor.class, "ViperRight");
-        intake = hardwareMap.get(CRServo.class, "inTake");
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
         sleeveDetection = new SleeveDetection();
@@ -92,8 +87,7 @@ public class DashboardTest extends LinearOpMode {
         fl.setDirection(DcMotor.Direction.FORWARD);
         br.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.FORWARD);
-        VL.setDirection(DcMotor.Direction.FORWARD);
-        VR.setDirection(DcMotor.Direction.REVERSE);
+
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
@@ -107,25 +101,19 @@ public class DashboardTest extends LinearOpMode {
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        VL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        VR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        VL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        VR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         telemetry.addData("Starting at", "%7d :%7d",
                 fr.getCurrentPosition(),
                 fl.getCurrentPosition(),
                 br.getCurrentPosition(),
-                bl.getCurrentPosition(),
-                VL.getCurrentPosition(),
-                VR.getCurrentPosition());
+                bl.getCurrentPosition());
         telemetry.update();
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -135,9 +123,7 @@ public class DashboardTest extends LinearOpMode {
                 fr.getCurrentPosition(),
                 fl.getCurrentPosition(),
                 br.getCurrentPosition(),
-                bl.getCurrentPosition(),
-                VL.getCurrentPosition(),
-                VR.getCurrentPosition());
+                bl.getCurrentPosition());
         dashboardTelemetry.update();
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -254,51 +240,7 @@ public class DashboardTest extends LinearOpMode {
 
     }
 
-    public void liftDrive(double speed,
-                          double Inches,
-                          double timeoutS) {
 
-        int newVLTarget;
-        int newVRTarget;
-
-        if (opModeIsActive()) {
-
-            newVLTarget = VL.getCurrentPosition() + (int) (Inches * COUNTS_PER_INCH);
-            newVRTarget = VR.getCurrentPosition() + (int) (Inches * COUNTS_PER_INCH);
-
-            VL.setTargetPosition(newVLTarget);
-            VR.setTargetPosition(newVRTarget);
-
-            VL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            VR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            runtime.reset();
-            VL.setPower(Math.abs(speed));
-            VR.setPower(Math.abs(speed));
-
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (VL.isBusy() && VR.isBusy())) {
-                // Display it for the driver.
-                telemetry.addData("Running to", " %7d :%7d", newVLTarget, newVRTarget);
-                telemetry.addData("Currently at", " at %7d :%7d", newVLTarget, newVRTarget,
-                        VR.getCurrentPosition(), VL.getCurrentPosition());
-                telemetry.update();
-
-            }
-            // Stop all motion;
-            VL.setPower(0);
-            VR.setPower(0);
-
-            VL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            VR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            sleep(250);
-
-
-        }
-
-    }
 
     public void strafing(double speed,
                          double leftInches, double rightInches,
